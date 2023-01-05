@@ -3,7 +3,7 @@ version: "3"
 services:
 
   ckan-dev:
-    container_name: ckan-dev
+    container_name: ckan-dev-sdaia
     build:
       context: ckan/
       dockerfile: Dockerfile.dev
@@ -24,14 +24,14 @@ services:
     
 
   datapusher:
-    container_name: datapusher
+    container_name: datapusher-sdaia
     build:
       context: datapusher/
     ports:
       - "8800:8800"
 
   db:
-    container_name: db
+    container_name: db-sdaia
     env_file:
       - .env
     build:
@@ -42,7 +42,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   solr:
-    container_name: solr
+    container_name: solr-sdaia
     image: ckan/ckan-solr:2.9-solr8
     ports:
       - "8983:8983"
@@ -54,6 +54,6 @@ services:
     image: redis:alpine
 
 volumes:
-  ckan_storage:
-  pg_data:
-  solr_data:
+  ckan_storage-sdaia:
+  pg_data-sdaia:
+  solr_data-sdaia:
