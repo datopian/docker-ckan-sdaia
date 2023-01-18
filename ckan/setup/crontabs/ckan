@@ -1,0 +1,2 @@
+*/5 * * * * ckan --config=/srv/app/ckan.ini harvester run >> /var/log/cron.log 2>&1 >> crontab.tmp
+* * * * * echo "HELLO WORLD" >> /var/log/cron.log 2>&1 >> crontab.tmp

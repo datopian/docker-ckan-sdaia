@@ -3,7 +3,7 @@ version: "3"
 services:
 
   ckan-dev:
-    container_name: ckan-dev-sdaia
+    container_name: ckan
     build:
       context: ckan/
       dockerfile: Dockerfile.dev

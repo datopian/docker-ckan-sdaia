@@ -21,7 +21,25 @@ RUN echo $TZ > /etc/timezone
 # Apply any patches needed to CKAN core or any of the built extensions (not the
 # runtime mounted ones)
 # See https://github.com/okfn/docker-ckan#applying-patches
+
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.6/supercronic-linux-amd64 \
+    SUPERCRONIC=supercronic-linux-amd64 \
+    SUPERCRONIC_SHA1SUM=c3b78d342e5413ad39092fd3cfc083a85f5e2b75
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+ && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+ && chmod +x "$SUPERCRONIC" \
+ && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+ && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
+RUN pip install -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest && \
+    pip install --no-cache-dir -r ${SRC_DIR}/ckanext-harvest/pip-requirements.txt
+COPY setup/harvest.conf /etc/supervisord.d/harvest.conf
+COPY setup/cron.conf /etc/supervisord.d/cron.conf
+COPY setup/crontabs/* /etc/crontabs/
+
 COPY patches ${APP_DIR}/patches
+
 
 RUN for d in $APP_DIR/patches/*; do \
         if [ -d $d ]; then \
